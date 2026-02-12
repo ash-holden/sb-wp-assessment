@@ -9,3 +9,6 @@ add_action( 'wp_enqueue_scripts', 'astra_child_enqueue_styles' );
 
 // PDP customizations
 require_once get_stylesheet_directory() . '/inc/woocommerce-single-product.php';
+
+// Product banners
+require_once get_stylesheet_directory() . '/inc/woocommerce-product-banners.php';
