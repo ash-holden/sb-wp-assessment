@@ -165,7 +165,72 @@ function astra_child_product_details_panels() {
 add_action( 'astra_woo_single_short_description_after', 'astra_child_product_details_panels', 10 );
 
 /**
- * Remove un-needed WooCommerce tabs 
+ * Add quote request section after accordions
+ */
+function astra_child_quote_request_section() {
+    if ( ! is_product() ) {
+        return;
+    }
+
+    global $product;
+
+    if ( ! $product instanceof WC_Product ) {
+        return;
+    }
+
+    $product_title = $product->get_name();
+    $product_sku   = $product->get_sku();
+    $contact_url   = esc_url( home_url( '/contact-us' ) );
+    ?>
+    <div class="quote-request-section">
+        <div class="quote-info">Pricing on Ebanista's collection is available by request due to the many custom options of our pieces. Please select "Request a Quote" to receive a prompt message or contact an Ebanista showroom or Design Studio for more information.</div>
+        <div class="quote-request-buttons">
+            <button type="button" class="quote-request-btn" data-product-title="<?php echo esc_attr( $product_title ); ?>" data-product-sku="<?php echo esc_attr( $product_sku ); ?>">Request A Quote</button>
+            <a href="<?php echo $contact_url; ?>" class="schedule-call-btn">Schedule A Call With A Designer</a>
+        </div>
+    </div>
+
+    <dialog id="quote-modal" class="quote-modal">
+        <div class="quote-modal__inner">
+            <button type="button" class="quote-modal__close" aria-label="Close">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <?php echo do_shortcode( '[contact-form-7 id="f00e276" title="Contact form 1"]' ); ?>
+        </div>
+    </dialog>
+
+    <script>
+        (function() {
+            var dialog = document.getElementById('quote-modal');
+            var openBtn = document.querySelector('.quote-request-btn');
+            var closeBtn = document.querySelector('.quote-modal__close');
+
+            if (!dialog || !openBtn) return;
+
+            openBtn.addEventListener('click', function() {
+                var titleInput = dialog.querySelector('input[name="product-title"]');
+                var skuInput = dialog.querySelector('input[name="product-sku"]');
+                if (titleInput) titleInput.value = openBtn.dataset.productTitle || '';
+                if (skuInput) skuInput.value = openBtn.dataset.productSku || '';
+                dialog.showModal();
+            });
+
+            if (closeBtn) closeBtn.addEventListener('click', function() { dialog.close(); });
+
+            dialog.addEventListener('click', function(e) {
+                if (e.target === dialog) dialog.close();
+            });
+        })();
+    </script>
+    <?php
+}
+add_action( 'astra_woo_single_short_description_after', 'astra_child_quote_request_section', 15 );
+
+/**
+ * Remove un-needed default WooCommerce tabs 
  */
 function astra_child_remove_product_tabs() {
     if ( ! is_product() ) {

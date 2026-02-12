@@ -58,7 +58,8 @@ body {
     text-transform: unset;
 }
 
-.woocommerce-product-details__short-description {
+.woocommerce-product-details__short-description,
+.quote-info {
     font-size: 14px;
     font-style: italic;
 }
@@ -87,8 +88,8 @@ body {
 }
 
 .product-details {
-    --transition-fast: 200ms;
-    --transition-slow: 400ms;
+    --transition-fast: 150ms;
+    --transition-slow: 300ms;
 }
 
 .product-details::details-content {
@@ -144,6 +145,100 @@ body {
     transition: opacity var(--transition-fast) var(--transition-slow) linear;
 }
 
+.quote-request-section {
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+}
+
+.quote-info {
+    margin-bottom: 1.5rem;
+    font-size: 14px;
+}
+
+.quote-request-buttons {
+    display: block;
+    flex-wrap: wrap;
+    gap: 1rem;
+    width: max-content;
+    max-width: 100%;
+    font-family: "Open Sans", sans-serif;
+    text-transform: uppercase;
+}
+
+.quote-request-btn,
+.schedule-call-btn {
+    display: block;
+    margin: 20px 0;
+    padding: 1em 1.5rem;
+    width: 100%;
+    min-height: 60px;
+    font-size: 15px;
+    text-transform: uppercase;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    border: 1px solid currentColor;
+    border-radius: 0px !important;
+    transition: 250ms linear;
+}
+
+.quote-request-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+.quote-request-btn:focus {
+    background: #000;
+    color: #fff;
+}
+
+.schedule-call-btn {
+    background: #fff;
+    color: #000;
+}
+
+.schedule-call-btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.quote-modal {
+    max-width: 90vw;
+    max-height: 90vh;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow-y: hidden;
+}
+
+.quote-modal::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.quote-modal__inner {
+    padding: 2rem;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.quote-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;    
+}
+
+.quote-modal__close:hover {
+    opacity: 0.7;
+}
 
 @media (min-width: 768px) {
     .custom-product-layout {
