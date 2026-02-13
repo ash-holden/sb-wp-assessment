@@ -140,6 +140,7 @@ function astra_child_product_details_panels() {
     if ( ! $lookbooks ) {
         $lookbooks = $product->get_attribute( 'lookbooks' );
     }
+    echo '<div class="details-accordions">';
 
     if ( $description ) {
         echo '<details class="product-details product-details--description">';
@@ -161,8 +162,61 @@ function astra_child_product_details_panels() {
         echo '<div class="accordion-inner">' . wp_kses_post( wpautop( $lookbooks ) ) . '</div>';
         echo '</details>';
     }
+
+    echo '</div>';
 }
 add_action( 'astra_woo_single_short_description_after', 'astra_child_product_details_panels', 10 );
+
+/**
+ * JS open/close animation for details accordions
+ */
+function astra_child_details_animation_script() {
+    if ( ! is_product() ) {
+        return;
+    }
+
+    wp_add_inline_script(
+        'jquery',
+        "jQuery(function($){
+            $(document).on('click', '.product-details summary', function(e){
+                e.preventDefault();
+                var details = $(this).closest('.product-details');
+                var inner = details.find('.accordion-inner');
+                var isOpen = details.attr('open');
+
+                if (isOpen) {
+                    inner.css('max-height', inner[0].scrollHeight + 'px');
+                    requestAnimationFrame(function(){
+                        inner.css('max-height', '0');
+                    });
+                    inner.one('transitionend', function(){
+                        details.removeAttr('open');
+                        inner.css('max-height', '');
+                    });
+                } else {
+                    details.attr('open', true);
+                    inner.css({'max-height': 'none', 'visibility': 'hidden'});
+                    var height = inner[0].scrollHeight;
+                    inner.css({'max-height': '0', 'visibility': 'visible'});
+                    requestAnimationFrame(function(){
+                        inner.css('max-height', height + 'px');
+                    });
+                    inner.one('transitionend', function(){
+                        inner.css('max-height', '');
+                    });
+                }
+            });
+            $('.product-details').each(function(){
+                var details = $(this);
+                var inner = details.find('.accordion-inner');
+                if (!details.attr('open')) {
+                    inner.css('max-height', '0');
+                }
+            });
+        });"
+    );
+}
+add_action( 'wp_enqueue_scripts', 'astra_child_details_animation_script', 20 );
 
 /**
  * Add quote request section after accordions
